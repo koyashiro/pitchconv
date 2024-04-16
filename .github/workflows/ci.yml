@@ -76,7 +76,7 @@ jobs:
             target/
           key: ${{ runner.os }}-${{ matrix.job.target }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@032431f26ad14217b24e529fa2ab72cf558de38b # stable
+        uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # stable
         with:
           targets: ${{ matrix.job.target }}
       - name: Install cross
