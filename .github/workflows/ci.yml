@@ -1,0 +1,116 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  fmt:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - name: Format check
+        run: cargo fmt --check
+
+  clippy:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - name: Cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-clippy-${{ hashFiles('**/Cargo.lock') }}
+      - name: Clippy
+        run: cargo clippy -- --deny warnings
+
+  build:
+    name: build (${{ matrix.job.target }})
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - { target: aarch64-apple-darwin, os: macos-13 }
+          # - { target: aarch64-pc-windows-gnu, os: ubuntu-22.04 }
+          # - { target: aarch64-pc-windows-msvc, os: windows-2022 }
+          - { target: aarch64-unknown-linux-gnu, os: ubuntu-22.04 }
+          - { target: aarch64-unknown-linux-musl, os: ubuntu-22.04 }
+          # - { target: arm-unknown-linux-gnueabi, os: ubuntu-22.04 }
+          # - { target: arm-unknown-linux-gnueabihf, os: ubuntu-22.04 }
+          # - { target: arm-unknown-linux-musleabi, os: ubuntu-22.04 }
+          # - { target: arm-unknown-linux-musleabihf, os: ubuntu-22.04 }
+          - { target: armv7-unknown-linux-gnueabi, os: ubuntu-22.04 }
+          - { target: armv7-unknown-linux-gnueabihf, os: ubuntu-22.04 }
+          - { target: armv7-unknown-linux-musleabi, os: ubuntu-22.04 }
+          - { target: armv7-unknown-linux-musleabihf, os: ubuntu-22.04 }
+          # - { target: i686-pc-windows-gnu, os: ubuntu-22.04 }
+          # - { target: i686-pc-windows-msvc, os: windows-2022 }
+          # - { target: i686-unknown-linux-gnu, os: ubuntu-22.04 }
+          # - { target: i686-unknown-linux-musl, os: ubuntu-22.04 }
+          - { target: x86_64-apple-darwin, os: macos-13 }
+          - { target: x86_64-pc-windows-gnu, os: ubuntu-22.04 }
+          - { target: x86_64-pc-windows-msvc, os: windows-2022 }
+          - { target: x86_64-unknown-linux-gnu, os: ubuntu-22.04 }
+          - { target: x86_64-unknown-linux-musl, os: ubuntu-22.04 }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - name: Cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-${{ matrix.job.target }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@032431f26ad14217b24e529fa2ab72cf558de38b # stable
+        with:
+          targets: ${{ matrix.job.target }}
+      - name: Install cross
+        run: cargo install --force cross
+        if: runner.os == 'Linux'
+      - name: Build
+        run: cargo build --locked --target=${{ matrix.job.target }}
+        if: runner.os != 'Linux'
+      - name: Build (cross)
+        run: cross build --locked --target=${{ matrix.job.target }}
+        if: runner.os == 'Linux'
+
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - name: Cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-test-${{ hashFiles('**/Cargo.lock') }}
+      - name: Test
+        run: cargo test --all-targets --all-features
+
+  audit:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - name: Audit
+        run: cargo audit

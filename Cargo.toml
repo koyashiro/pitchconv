@@ -1,0 +1,23 @@
+[package]
+name = "pitchconv"
+version = "0.0.0"
+authors = ["koyashiro <develop@koyashi.ro>"]
+edition = "2021"
+description = "Pitch converter"
+readme = "README.md"
+homepage = "https://github.com/koyashiro/pitchconv"
+repository = "https://github.com/koyashiro/pitchconv"
+license = "MIT OR Apache-2.0"
+keywords = ["pitch"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+clap = { version = "4.5.4", features = ["derive"] }
+regex = "1.10.4"
+
+[profile.release]
+opt-level = 3
+strip = true
+lto = true
+panic = "abort"
+codegen-units = 1
