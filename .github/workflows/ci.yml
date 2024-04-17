@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
+        with:
+          toolchain: 1.77.2
+          components: rustfmt
       - name: Format check
         run: cargo fmt --check
 
@@ -30,6 +35,11 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-clippy-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
+        with:
+          toolchain: 1.77.2
+          components: clippy
       - name: Clippy
         run: cargo clippy -- --deny warnings
 
@@ -76,8 +86,9 @@ jobs:
             target/
           key: ${{ runner.os }}-${{ matrix.job.target }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@032431f26ad14217b24e529fa2ab72cf558de38b # stable
+        uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
         with:
+          toolchain: 1.77.2
           targets: ${{ matrix.job.target }}
       - name: Install cross
         run: cargo install --force cross
@@ -104,6 +115,10 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-test-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
+        with:
+          toolchain: 1.77.2
       - name: Test
         run: cargo test --all-targets --all-features
 
@@ -112,5 +127,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
+        with:
+          toolchain: 1.77.2
       - name: Audit
         run: cargo audit
