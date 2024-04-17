@@ -220,8 +220,8 @@ pub struct AlternativePitchNotation<'a>(&'a Pitch);
 impl std::fmt::Display for AlternativePitchNotation<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let o = match self.0.pitch_class {
-            PitchClass::A | PitchClass::ASharp | PitchClass::B => self.0.octave + 1,
-            _ => self.0.octave,
+            PitchClass::A | PitchClass::ASharp | PitchClass::B => self.0.octave as u16 + 1,
+            _ => self.0.octave as u16,
         };
 
         match o {
@@ -245,205 +245,1121 @@ impl std::fmt::Display for AlternativePitchNotation<'_> {
 mod tests {
     use super::*;
 
+    struct PitchClassCase {
+        pitch_class: PitchClass,
+        s: &'static str,
+    }
+
+    struct PitchCase {
+        pitch: Pitch,
+        scientific_pitch_notation: &'static str,
+        alternative_pitch_notation: &'static str,
+    }
+
+    const PITCH_CLASS_CASES: [PitchClassCase; 12] = [
+        PitchClassCase {
+            pitch_class: PitchClass::C,
+            s: "C",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::CSharp,
+            s: "C#",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::D,
+            s: "D",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::DSharp,
+            s: "D#",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::E,
+            s: "E",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::F,
+            s: "F",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::FSharp,
+            s: "F#",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::G,
+            s: "G",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::GSharp,
+            s: "G#",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::A,
+            s: "A",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::ASharp,
+            s: "A#",
+        },
+        PitchClassCase {
+            pitch_class: PitchClass::B,
+            s: "B",
+        },
+    ];
+
+    const PITCH_CASES: [PitchCase; 12 * 10] = [
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::C,
+            },
+            scientific_pitch_notation: "C0",
+            alternative_pitch_notation: "lowlowlowC",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::CSharp,
+            },
+            scientific_pitch_notation: "C#0",
+            alternative_pitch_notation: "lowlowlowC#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::D,
+            },
+            scientific_pitch_notation: "D0",
+            alternative_pitch_notation: "lowlowlowD",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::DSharp,
+            },
+            scientific_pitch_notation: "D#0",
+            alternative_pitch_notation: "lowlowlowD#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::E,
+            },
+            scientific_pitch_notation: "E0",
+            alternative_pitch_notation: "lowlowlowE",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::F,
+            },
+            scientific_pitch_notation: "F0",
+            alternative_pitch_notation: "lowlowlowF",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::FSharp,
+            },
+            scientific_pitch_notation: "F#0",
+            alternative_pitch_notation: "lowlowlowF#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::G,
+            },
+            scientific_pitch_notation: "G0",
+            alternative_pitch_notation: "lowlowlowG",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::GSharp,
+            },
+            scientific_pitch_notation: "G#0",
+            alternative_pitch_notation: "lowlowlowG#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::A,
+            },
+            scientific_pitch_notation: "A0",
+            alternative_pitch_notation: "lowlowA",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::ASharp,
+            },
+            scientific_pitch_notation: "A#0",
+            alternative_pitch_notation: "lowlowA#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 0,
+                pitch_class: PitchClass::B,
+            },
+            scientific_pitch_notation: "B0",
+            alternative_pitch_notation: "lowlowB",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::C,
+            },
+            scientific_pitch_notation: "C1",
+            alternative_pitch_notation: "lowlowC",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::CSharp,
+            },
+            scientific_pitch_notation: "C#1",
+            alternative_pitch_notation: "lowlowC#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::D,
+            },
+            scientific_pitch_notation: "D1",
+            alternative_pitch_notation: "lowlowD",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::DSharp,
+            },
+            scientific_pitch_notation: "D#1",
+            alternative_pitch_notation: "lowlowD#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::E,
+            },
+            scientific_pitch_notation: "E1",
+            alternative_pitch_notation: "lowlowE",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::F,
+            },
+            scientific_pitch_notation: "F1",
+            alternative_pitch_notation: "lowlowF",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::FSharp,
+            },
+            scientific_pitch_notation: "F#1",
+            alternative_pitch_notation: "lowlowF#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::G,
+            },
+            scientific_pitch_notation: "G1",
+            alternative_pitch_notation: "lowlowG",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::GSharp,
+            },
+            scientific_pitch_notation: "G#1",
+            alternative_pitch_notation: "lowlowG#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::A,
+            },
+            scientific_pitch_notation: "A1",
+            alternative_pitch_notation: "lowA",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::ASharp,
+            },
+            scientific_pitch_notation: "A#1",
+            alternative_pitch_notation: "lowA#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 1,
+                pitch_class: PitchClass::B,
+            },
+            scientific_pitch_notation: "B1",
+            alternative_pitch_notation: "lowB",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::C,
+            },
+            scientific_pitch_notation: "C2",
+            alternative_pitch_notation: "lowC",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::CSharp,
+            },
+            scientific_pitch_notation: "C#2",
+            alternative_pitch_notation: "lowC#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::D,
+            },
+            scientific_pitch_notation: "D2",
+            alternative_pitch_notation: "lowD",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::DSharp,
+            },
+            scientific_pitch_notation: "D#2",
+            alternative_pitch_notation: "lowD#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::E,
+            },
+            scientific_pitch_notation: "E2",
+            alternative_pitch_notation: "lowE",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::F,
+            },
+            scientific_pitch_notation: "F2",
+            alternative_pitch_notation: "lowF",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::FSharp,
+            },
+            scientific_pitch_notation: "F#2",
+            alternative_pitch_notation: "lowF#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::G,
+            },
+            scientific_pitch_notation: "G2",
+            alternative_pitch_notation: "lowG",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::GSharp,
+            },
+            scientific_pitch_notation: "G#2",
+            alternative_pitch_notation: "lowG#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::A,
+            },
+            scientific_pitch_notation: "A2",
+            alternative_pitch_notation: "mid1A",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::ASharp,
+            },
+            scientific_pitch_notation: "A#2",
+            alternative_pitch_notation: "mid1A#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 2,
+                pitch_class: PitchClass::B,
+            },
+            scientific_pitch_notation: "B2",
+            alternative_pitch_notation: "mid1B",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::C,
+            },
+            scientific_pitch_notation: "C3",
+            alternative_pitch_notation: "mid1C",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::CSharp,
+            },
+            scientific_pitch_notation: "C#3",
+            alternative_pitch_notation: "mid1C#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::D,
+            },
+            scientific_pitch_notation: "D3",
+            alternative_pitch_notation: "mid1D",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::DSharp,
+            },
+            scientific_pitch_notation: "D#3",
+            alternative_pitch_notation: "mid1D#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::E,
+            },
+            scientific_pitch_notation: "E3",
+            alternative_pitch_notation: "mid1E",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::F,
+            },
+            scientific_pitch_notation: "F3",
+            alternative_pitch_notation: "mid1F",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::FSharp,
+            },
+            scientific_pitch_notation: "F#3",
+            alternative_pitch_notation: "mid1F#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::G,
+            },
+            scientific_pitch_notation: "G3",
+            alternative_pitch_notation: "mid1G",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::GSharp,
+            },
+            scientific_pitch_notation: "G#3",
+            alternative_pitch_notation: "mid1G#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::A,
+            },
+            scientific_pitch_notation: "A3",
+            alternative_pitch_notation: "mid2A",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::ASharp,
+            },
+            scientific_pitch_notation: "A#3",
+            alternative_pitch_notation: "mid2A#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 3,
+                pitch_class: PitchClass::B,
+            },
+            scientific_pitch_notation: "B3",
+            alternative_pitch_notation: "mid2B",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::C,
+            },
+            scientific_pitch_notation: "C4",
+            alternative_pitch_notation: "mid2C",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::CSharp,
+            },
+            scientific_pitch_notation: "C#4",
+            alternative_pitch_notation: "mid2C#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::D,
+            },
+            scientific_pitch_notation: "D4",
+            alternative_pitch_notation: "mid2D",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::DSharp,
+            },
+            scientific_pitch_notation: "D#4",
+            alternative_pitch_notation: "mid2D#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::E,
+            },
+            scientific_pitch_notation: "E4",
+            alternative_pitch_notation: "mid2E",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::F,
+            },
+            scientific_pitch_notation: "F4",
+            alternative_pitch_notation: "mid2F",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::FSharp,
+            },
+            scientific_pitch_notation: "F#4",
+            alternative_pitch_notation: "mid2F#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::G,
+            },
+            scientific_pitch_notation: "G4",
+            alternative_pitch_notation: "mid2G",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::GSharp,
+            },
+            scientific_pitch_notation: "G#4",
+            alternative_pitch_notation: "mid2G#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::A,
+            },
+            scientific_pitch_notation: "A4",
+            alternative_pitch_notation: "highA",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::ASharp,
+            },
+            scientific_pitch_notation: "A#4",
+            alternative_pitch_notation: "highA#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 4,
+                pitch_class: PitchClass::B,
+            },
+            scientific_pitch_notation: "B4",
+            alternative_pitch_notation: "highB",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::C,
+            },
+            scientific_pitch_notation: "C5",
+            alternative_pitch_notation: "highC",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::CSharp,
+            },
+            scientific_pitch_notation: "C#5",
+            alternative_pitch_notation: "highC#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::D,
+            },
+            scientific_pitch_notation: "D5",
+            alternative_pitch_notation: "highD",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::DSharp,
+            },
+            scientific_pitch_notation: "D#5",
+            alternative_pitch_notation: "highD#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::E,
+            },
+            scientific_pitch_notation: "E5",
+            alternative_pitch_notation: "highE",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::F,
+            },
+            scientific_pitch_notation: "F5",
+            alternative_pitch_notation: "highF",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::FSharp,
+            },
+            scientific_pitch_notation: "F#5",
+            alternative_pitch_notation: "highF#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::G,
+            },
+            scientific_pitch_notation: "G5",
+            alternative_pitch_notation: "highG",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::GSharp,
+            },
+            scientific_pitch_notation: "G#5",
+            alternative_pitch_notation: "highG#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::A,
+            },
+            scientific_pitch_notation: "A5",
+            alternative_pitch_notation: "highhighA",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::ASharp,
+            },
+            scientific_pitch_notation: "A#5",
+            alternative_pitch_notation: "highhighA#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 5,
+                pitch_class: PitchClass::B,
+            },
+            scientific_pitch_notation: "B5",
+            alternative_pitch_notation: "highhighB",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::C,
+            },
+            scientific_pitch_notation: "C6",
+            alternative_pitch_notation: "highhighC",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::CSharp,
+            },
+            scientific_pitch_notation: "C#6",
+            alternative_pitch_notation: "highhighC#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::D,
+            },
+            scientific_pitch_notation: "D6",
+            alternative_pitch_notation: "highhighD",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::DSharp,
+            },
+            scientific_pitch_notation: "D#6",
+            alternative_pitch_notation: "highhighD#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::E,
+            },
+            scientific_pitch_notation: "E6",
+            alternative_pitch_notation: "highhighE",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::F,
+            },
+            scientific_pitch_notation: "F6",
+            alternative_pitch_notation: "highhighF",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::FSharp,
+            },
+            scientific_pitch_notation: "F#6",
+            alternative_pitch_notation: "highhighF#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::G,
+            },
+            scientific_pitch_notation: "G6",
+            alternative_pitch_notation: "highhighG",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::GSharp,
+            },
+            scientific_pitch_notation: "G#6",
+            alternative_pitch_notation: "highhighG#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::A,
+            },
+            scientific_pitch_notation: "A6",
+            alternative_pitch_notation: "highhighhighA",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::ASharp,
+            },
+            scientific_pitch_notation: "A#6",
+            alternative_pitch_notation: "highhighhighA#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::B,
+            },
+            scientific_pitch_notation: "B6",
+            alternative_pitch_notation: "highhighhighB",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 6,
+                pitch_class: PitchClass::C,
+            },
+            scientific_pitch_notation: "C6",
+            alternative_pitch_notation: "highhighC",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::CSharp,
+            },
+            scientific_pitch_notation: "C#7",
+            alternative_pitch_notation: "highhighhighC#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::D,
+            },
+            scientific_pitch_notation: "D7",
+            alternative_pitch_notation: "highhighhighD",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::DSharp,
+            },
+            scientific_pitch_notation: "D#7",
+            alternative_pitch_notation: "highhighhighD#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::E,
+            },
+            scientific_pitch_notation: "E7",
+            alternative_pitch_notation: "highhighhighE",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::F,
+            },
+            scientific_pitch_notation: "F7",
+            alternative_pitch_notation: "highhighhighF",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::FSharp,
+            },
+            scientific_pitch_notation: "F#7",
+            alternative_pitch_notation: "highhighhighF#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::G,
+            },
+            scientific_pitch_notation: "G7",
+            alternative_pitch_notation: "highhighhighG",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::GSharp,
+            },
+            scientific_pitch_notation: "G#7",
+            alternative_pitch_notation: "highhighhighG#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::A,
+            },
+            scientific_pitch_notation: "A7",
+            alternative_pitch_notation: "highhighhighhighA",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::ASharp,
+            },
+            scientific_pitch_notation: "A#7",
+            alternative_pitch_notation: "highhighhighhighA#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 7,
+                pitch_class: PitchClass::B,
+            },
+            scientific_pitch_notation: "B7",
+            alternative_pitch_notation: "highhighhighhighB",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::C,
+            },
+            scientific_pitch_notation: "C8",
+            alternative_pitch_notation: "highhighhighhighC",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::CSharp,
+            },
+            scientific_pitch_notation: "C#8",
+            alternative_pitch_notation: "highhighhighhighC#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::D,
+            },
+            scientific_pitch_notation: "D8",
+            alternative_pitch_notation: "highhighhighhighD",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::DSharp,
+            },
+            scientific_pitch_notation: "D#8",
+            alternative_pitch_notation: "highhighhighhighD#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::E,
+            },
+            scientific_pitch_notation: "E8",
+            alternative_pitch_notation: "highhighhighhighE",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::F,
+            },
+            scientific_pitch_notation: "F8",
+            alternative_pitch_notation: "highhighhighhighF",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::FSharp,
+            },
+            scientific_pitch_notation: "F#8",
+            alternative_pitch_notation: "highhighhighhighF#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::G,
+            },
+            scientific_pitch_notation: "G8",
+            alternative_pitch_notation: "highhighhighhighG",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::GSharp,
+            },
+            scientific_pitch_notation: "G#8",
+            alternative_pitch_notation: "highhighhighhighG#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::A,
+            },
+            scientific_pitch_notation: "A8",
+            alternative_pitch_notation: "highhighhighhighhighA",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::ASharp,
+            },
+            scientific_pitch_notation: "A#8",
+            alternative_pitch_notation: "highhighhighhighhighA#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 8,
+                pitch_class: PitchClass::B,
+            },
+            scientific_pitch_notation: "B8",
+            alternative_pitch_notation: "highhighhighhighhighB",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::C,
+            },
+            scientific_pitch_notation: "C255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighC",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::CSharp,
+            },
+            scientific_pitch_notation: "C#255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighC#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::D,
+            },
+            scientific_pitch_notation: "D255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighD",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::DSharp,
+            },
+            scientific_pitch_notation: "D#255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighD#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::E,
+            },
+            scientific_pitch_notation: "E255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighE",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::F,
+            },
+            scientific_pitch_notation: "F255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighF",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::FSharp,
+            },
+            scientific_pitch_notation: "F#255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighF#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::G,
+            },
+            scientific_pitch_notation: "G255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighG",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::GSharp,
+            },
+            scientific_pitch_notation: "G#255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighG#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::A,
+            },
+            scientific_pitch_notation: "A255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighA",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::ASharp,
+            },
+            scientific_pitch_notation: "A#255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighA#",
+        },
+        PitchCase {
+            pitch: Pitch {
+                octave: 255,
+                pitch_class: PitchClass::B,
+            },
+            scientific_pitch_notation: "B255",
+            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighB",
+        },
+    ];
+
     #[test]
     fn test_parse_pitch_class() {
-        assert_eq!(Ok(PitchClass::C), parse_pitch_class("C"));
-        assert_eq!(Ok(PitchClass::CSharp), parse_pitch_class("C#"));
-        assert_eq!(Ok(PitchClass::D), parse_pitch_class("D"));
-        assert_eq!(Ok(PitchClass::DSharp), parse_pitch_class("D#"));
-        assert_eq!(Ok(PitchClass::E), parse_pitch_class("E"));
-        assert_eq!(Ok(PitchClass::F), parse_pitch_class("F"));
-        assert_eq!(Ok(PitchClass::FSharp), parse_pitch_class("F#"));
-        assert_eq!(Ok(PitchClass::G), parse_pitch_class("G"));
-        assert_eq!(Ok(PitchClass::GSharp), parse_pitch_class("G#"));
-        assert_eq!(Ok(PitchClass::A), parse_pitch_class("A"));
-        assert_eq!(Ok(PitchClass::ASharp), parse_pitch_class("A#"));
-        assert_eq!(Ok(PitchClass::B), parse_pitch_class("B"));
+        for case in PITCH_CLASS_CASES {
+            assert_eq!(Ok(case.pitch_class), parse_pitch_class(case.s));
+        }
 
         assert_eq!(Err(ParsePitchClassError), parse_pitch_class("invalid"));
+        for case in PITCH_CLASS_CASES {
+            assert_eq!(
+                Err(ParsePitchClassError),
+                parse_pitch_class(&case.s.to_lowercase()),
+            );
+        }
+    }
+
+    #[test]
+    fn test_pitch_class_to_string() {
+        for case in PITCH_CLASS_CASES {
+            assert_eq!(case.s, case.pitch_class.to_string());
+        }
     }
 
     #[test]
     fn test_parse_scientific_pitch_notation() {
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::C
-            }),
-            parse_scientific_pitch_notation("C0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::CSharp
-            }),
-            parse_scientific_pitch_notation("C#0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::D
-            }),
-            parse_scientific_pitch_notation("D0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::DSharp
-            }),
-            parse_scientific_pitch_notation("D#0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::E
-            }),
-            parse_scientific_pitch_notation("E0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::F
-            }),
-            parse_scientific_pitch_notation("F0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::FSharp
-            }),
-            parse_scientific_pitch_notation("F#0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::G
-            }),
-            parse_scientific_pitch_notation("G0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::GSharp
-            }),
-            parse_scientific_pitch_notation("G#0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::A
-            }),
-            parse_scientific_pitch_notation("A0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::ASharp
-            }),
-            parse_scientific_pitch_notation("A#0"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::B
-            }),
-            parse_scientific_pitch_notation("B0"),
-        );
+        for case in PITCH_CASES {
+            assert_eq!(
+                Ok(case.pitch),
+                parse_scientific_pitch_notation(case.scientific_pitch_notation),
+            );
+        }
+
         assert_eq!(
             Err(ParsePitchError),
             parse_scientific_pitch_notation("invalid"),
         );
+        assert_eq!(Err(ParsePitchError), parse_scientific_pitch_notation("B-1"));
+        assert_eq!(
+            Err(ParsePitchError),
+            parse_scientific_pitch_notation("C256"),
+        );
+        for case in PITCH_CASES {
+            assert_eq!(
+                Err(ParsePitchError),
+                parse_scientific_pitch_notation(&case.scientific_pitch_notation.to_lowercase()),
+            );
+        }
+    }
+
+    #[test]
+    fn test_scientific_pitch_notation_to_string() {
+        for case in PITCH_CASES {
+            assert_eq!(
+                case.scientific_pitch_notation,
+                case.pitch.scientific_pitch_notation().to_string(),
+            );
+        }
     }
 
     #[test]
     fn test_parse_alternative_pitch_notation() {
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::C
-            }),
-            parse_alternative_pitch_notation("lowlowlowC"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::CSharp
-            }),
-            parse_alternative_pitch_notation("lowlowlowC#"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::D
-            }),
-            parse_alternative_pitch_notation("lowlowlowD"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::DSharp
-            }),
-            parse_alternative_pitch_notation("lowlowlowD#"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::E
-            }),
-            parse_alternative_pitch_notation("lowlowlowE"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::F
-            }),
-            parse_alternative_pitch_notation("lowlowlowF"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::FSharp
-            }),
-            parse_alternative_pitch_notation("lowlowlowF#"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::G
-            }),
-            parse_alternative_pitch_notation("lowlowlowG"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::GSharp
-            }),
-            parse_alternative_pitch_notation("lowlowlowG#"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::A
-            }),
-            parse_alternative_pitch_notation("lowlowA"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::ASharp
-            }),
-            parse_alternative_pitch_notation("lowlowA#"),
-        );
-        assert_eq!(
-            Ok(Pitch {
-                octave: 0,
-                pitch_class: PitchClass::B
-            }),
-            parse_alternative_pitch_notation("lowlowB"),
-        );
+        for case in PITCH_CASES {
+            assert_eq!(
+                Ok(case.pitch),
+                parse_alternative_pitch_notation(case.alternative_pitch_notation),
+            );
+        }
+
         assert_eq!(
             Err(ParsePitchError),
             parse_alternative_pitch_notation("invalid"),
         );
+        assert_eq!(
+            Err(ParsePitchError),
+            parse_alternative_pitch_notation("highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighC"),
+        );
+        for case in PITCH_CASES {
+            assert_eq!(
+                Err(ParsePitchError),
+                parse_alternative_pitch_notation(&case.alternative_pitch_notation.to_lowercase()),
+            );
+        }
+    }
+
+    #[test]
+    fn test_alternative_pitch_notation_to_string() {
+        for case in PITCH_CASES {
+            assert_eq!(
+                case.alternative_pitch_notation,
+                case.pitch.alternative_pitch_notation().to_string(),
+            );
+        }
     }
 }
