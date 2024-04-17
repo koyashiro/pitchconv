@@ -1,0 +1,94 @@
+name: release
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: release (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { target: aarch64-apple-darwin, os: macos-14 }
+          # - { target: aarch64-pc-windows-gnullvm, os: ubuntu-22.04 }
+          - { target: aarch64-pc-windows-msvc, os: windows-2022 }
+          - { target: aarch64-unknown-linux-gnu, os: ubuntu-22.04 }
+          - { target: aarch64-unknown-linux-musl, os: ubuntu-22.04 }
+          - { target: armv7-unknown-linux-gnueabi, os: ubuntu-22.04 }
+          - { target: armv7-unknown-linux-gnueabihf, os: ubuntu-22.04 }
+          - { target: armv7-unknown-linux-musleabi, os: ubuntu-22.04 }
+          - { target: armv7-unknown-linux-musleabihf, os: ubuntu-22.04 }
+          - { target: x86_64-apple-darwin, os: macos-14 }
+          - { target: x86_64-pc-windows-gnu, os: ubuntu-22.04 }
+          - { target: x86_64-pc-windows-msvc, os: windows-2022 }
+          - { target: x86_64-unknown-linux-gnu, os: ubuntu-22.04 }
+          - { target: x86_64-unknown-linux-musl, os: ubuntu-22.04 }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - name: Cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ matrix.os }}-${{ matrix.target }}-cargo-build-release-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
+        with:
+          toolchain: stable
+          targets: ${{ matrix.target }}
+      - name: Install cross
+        run: cargo install --force cross
+        if: runner.os == 'Linux'
+      - name: Build
+        run: cargo build --locked --release --target=${{ matrix.target }}
+        if: runner.os != 'Linux'
+      - name: Build (cross)
+        run: cross build --locked --release --target=${{ matrix.target }}
+        if: runner.os == 'Linux'
+      - name: Archive
+        id: archive
+        shell: bash
+        run: |
+          # Set $BIN_NAME
+          case ${{ matrix.target }} in
+            *-pc-windows-*) BIN_NAME_SUFFIX='.exe' ;;
+            *) BIN_NAME_SUFFIX='' ;;
+          esac
+          BIN_NAME="pitchconv${BIN_NAME_SUFFIX}"
+
+          cp "target/${{ matrix.target }}/release/${BIN_NAME}" .
+
+          # Set $ARCHIVE_PATH
+          RELEASE_VERSION="${GITHUB_REF#refs/tags/v}"
+          ARCHIVE_BASENAME="pitchconv-${RELEASE_VERSION}-${{ matrix.target }}"
+          case ${{ matrix.target }} in
+            *-pc-windows-*) ARCHIVE_SUFFIX='.zip' ;;
+            *) ARCHIVE_SUFFIX='.tar.gz' ;;
+          esac
+          ARCHIVE_PATH="${ARCHIVE_BASENAME}${ARCHIVE_SUFFIX}"
+
+          # Create archive
+          case ${{ matrix.target }} in
+            *-pc-windows-*) 7z a "${ARCHIVE_PATH}" "${BIN_NAME}" LICENSE-APACHE LICENSE-MIT README.md ;;
+            *) tar -czf "${ARCHIVE_PATH}" "${BIN_NAME}" LICENSE-APACHE LICENSE-MIT README.md ;;
+          esac
+
+          echo "ARCHIVE_PATH=${ARCHIVE_PATH}" >> "$GITHUB_ENV"
+      - name: Publish release
+        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564 # v2.0.4
+        with:
+          files: ${{ env.ARCHIVE_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
