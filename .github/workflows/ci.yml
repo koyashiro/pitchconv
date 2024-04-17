@@ -15,7 +15,7 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
         with:
-          toolchain: 1.77.2
+          toolchain: stable
           components: rustfmt
       - name: Format check
         run: cargo fmt --check
@@ -34,24 +34,24 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ runner.os }}-cargo-clippy-${{ hashFiles('**/Cargo.lock') }}
+          key: cargo-clippy-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
         with:
-          toolchain: 1.77.2
+          toolchain: stable
           components: clippy
       - name: Clippy
         run: cargo clippy -- --deny warnings
 
   build:
-    name: build (${{ matrix.job.target }})
-    runs-on: ${{ matrix.job.os }}
+    name: build (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        job:
+        include:
           - { target: aarch64-apple-darwin, os: macos-14 }
-          #- { target: aarch64-pc-windows-gnullvm, os: ubuntu-22.04 }
+          # - { target: aarch64-pc-windows-gnullvm, os: ubuntu-22.04 }
           - { target: aarch64-pc-windows-msvc, os: windows-2022 }
           - { target: aarch64-unknown-linux-gnu, os: ubuntu-22.04 }
           - { target: aarch64-unknown-linux-musl, os: ubuntu-22.04 }
@@ -76,20 +76,20 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ runner.os }}-${{ matrix.job.target }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ matrix.os }}-${{ matrix.target }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
         with:
-          toolchain: 1.77.2
-          targets: ${{ matrix.job.target }}
+          toolchain: stable
+          targets: ${{ matrix.target }}
       - name: Install cross
         run: cargo install --force cross
         if: runner.os == 'Linux'
       - name: Build
-        run: cargo build --locked --target=${{ matrix.job.target }}
+        run: cargo build --locked --target=${{ matrix.target }}
         if: runner.os != 'Linux'
       - name: Build (cross)
-        run: cross build --locked --target=${{ matrix.job.target }}
+        run: cross build --locked --target=${{ matrix.target }}
         if: runner.os == 'Linux'
 
   test:
@@ -106,11 +106,11 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ runner.os }}-cargo-test-${{ hashFiles('**/Cargo.lock') }}
+          key: cargo-test-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
         with:
-          toolchain: 1.77.2
+          toolchain: stable
       - name: Test
         run: cargo test --all-targets --all-features
 
@@ -122,6 +122,6 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
         with:
-          toolchain: 1.77.2
+          toolchain: stable
       - name: Audit
         run: cargo audit
