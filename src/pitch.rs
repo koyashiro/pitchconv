@@ -160,7 +160,7 @@ fn parse_scientific_pitch_notation(s: &str) -> Result<Pitch, ParsePitchError> {
 
 fn parse_alternative_pitch_notation(s: &str) -> Result<Pitch, ParsePitchError> {
     let Some(caps) =
-        Regex::new(r"^(?<octave>low|lowlow|lowlowlow|mid[12]|(high)+)(?<pitch_class>[A-G][#]?)$")
+        Regex::new(r"^(?<octave>low|lowlow|lowlowlow|mid[12]|(hi)+)(?<pitch_class>[A-G][#]?)$")
             .unwrap()
             .captures(s)
     else {
@@ -179,7 +179,7 @@ fn parse_alternative_pitch_notation(s: &str) -> Result<Pitch, ParsePitchError> {
             "mid1" => 3,
             "mid2" => 4,
             s => {
-                let count = s.matches("high").count();
+                let count = s.matches("hi").count();
 
                 if count == 0 {
                     return Err(ParsePitchError);
@@ -232,7 +232,7 @@ impl std::fmt::Display for AlternativePitchNotation<'_> {
             4 => write!(f, "mid2")?,
             n => {
                 for _ in 0..n - 4 {
-                    write!(f, "high")?;
+                    write!(f, "hi")?;
                 }
             }
         }
@@ -770,7 +770,7 @@ mod tests {
                 pitch_class: PitchClass::A,
             },
             scientific_pitch_notation: "A4",
-            alternative_pitch_notation: "highA",
+            alternative_pitch_notation: "hiA",
         },
         PitchCase {
             pitch: Pitch {
@@ -778,7 +778,7 @@ mod tests {
                 pitch_class: PitchClass::ASharp,
             },
             scientific_pitch_notation: "A#4",
-            alternative_pitch_notation: "highA#",
+            alternative_pitch_notation: "hiA#",
         },
         PitchCase {
             pitch: Pitch {
@@ -786,7 +786,7 @@ mod tests {
                 pitch_class: PitchClass::B,
             },
             scientific_pitch_notation: "B4",
-            alternative_pitch_notation: "highB",
+            alternative_pitch_notation: "hiB",
         },
         PitchCase {
             pitch: Pitch {
@@ -794,7 +794,7 @@ mod tests {
                 pitch_class: PitchClass::C,
             },
             scientific_pitch_notation: "C5",
-            alternative_pitch_notation: "highC",
+            alternative_pitch_notation: "hiC",
         },
         PitchCase {
             pitch: Pitch {
@@ -802,7 +802,7 @@ mod tests {
                 pitch_class: PitchClass::CSharp,
             },
             scientific_pitch_notation: "C#5",
-            alternative_pitch_notation: "highC#",
+            alternative_pitch_notation: "hiC#",
         },
         PitchCase {
             pitch: Pitch {
@@ -810,7 +810,7 @@ mod tests {
                 pitch_class: PitchClass::D,
             },
             scientific_pitch_notation: "D5",
-            alternative_pitch_notation: "highD",
+            alternative_pitch_notation: "hiD",
         },
         PitchCase {
             pitch: Pitch {
@@ -818,7 +818,7 @@ mod tests {
                 pitch_class: PitchClass::DSharp,
             },
             scientific_pitch_notation: "D#5",
-            alternative_pitch_notation: "highD#",
+            alternative_pitch_notation: "hiD#",
         },
         PitchCase {
             pitch: Pitch {
@@ -826,7 +826,7 @@ mod tests {
                 pitch_class: PitchClass::E,
             },
             scientific_pitch_notation: "E5",
-            alternative_pitch_notation: "highE",
+            alternative_pitch_notation: "hiE",
         },
         PitchCase {
             pitch: Pitch {
@@ -834,7 +834,7 @@ mod tests {
                 pitch_class: PitchClass::F,
             },
             scientific_pitch_notation: "F5",
-            alternative_pitch_notation: "highF",
+            alternative_pitch_notation: "hiF",
         },
         PitchCase {
             pitch: Pitch {
@@ -842,7 +842,7 @@ mod tests {
                 pitch_class: PitchClass::FSharp,
             },
             scientific_pitch_notation: "F#5",
-            alternative_pitch_notation: "highF#",
+            alternative_pitch_notation: "hiF#",
         },
         PitchCase {
             pitch: Pitch {
@@ -850,7 +850,7 @@ mod tests {
                 pitch_class: PitchClass::G,
             },
             scientific_pitch_notation: "G5",
-            alternative_pitch_notation: "highG",
+            alternative_pitch_notation: "hiG",
         },
         PitchCase {
             pitch: Pitch {
@@ -858,7 +858,7 @@ mod tests {
                 pitch_class: PitchClass::GSharp,
             },
             scientific_pitch_notation: "G#5",
-            alternative_pitch_notation: "highG#",
+            alternative_pitch_notation: "hiG#",
         },
         PitchCase {
             pitch: Pitch {
@@ -866,7 +866,7 @@ mod tests {
                 pitch_class: PitchClass::A,
             },
             scientific_pitch_notation: "A5",
-            alternative_pitch_notation: "highhighA",
+            alternative_pitch_notation: "hihiA",
         },
         PitchCase {
             pitch: Pitch {
@@ -874,7 +874,7 @@ mod tests {
                 pitch_class: PitchClass::ASharp,
             },
             scientific_pitch_notation: "A#5",
-            alternative_pitch_notation: "highhighA#",
+            alternative_pitch_notation: "hihiA#",
         },
         PitchCase {
             pitch: Pitch {
@@ -882,7 +882,7 @@ mod tests {
                 pitch_class: PitchClass::B,
             },
             scientific_pitch_notation: "B5",
-            alternative_pitch_notation: "highhighB",
+            alternative_pitch_notation: "hihiB",
         },
         PitchCase {
             pitch: Pitch {
@@ -890,7 +890,7 @@ mod tests {
                 pitch_class: PitchClass::C,
             },
             scientific_pitch_notation: "C6",
-            alternative_pitch_notation: "highhighC",
+            alternative_pitch_notation: "hihiC",
         },
         PitchCase {
             pitch: Pitch {
@@ -898,7 +898,7 @@ mod tests {
                 pitch_class: PitchClass::CSharp,
             },
             scientific_pitch_notation: "C#6",
-            alternative_pitch_notation: "highhighC#",
+            alternative_pitch_notation: "hihiC#",
         },
         PitchCase {
             pitch: Pitch {
@@ -906,7 +906,7 @@ mod tests {
                 pitch_class: PitchClass::D,
             },
             scientific_pitch_notation: "D6",
-            alternative_pitch_notation: "highhighD",
+            alternative_pitch_notation: "hihiD",
         },
         PitchCase {
             pitch: Pitch {
@@ -914,7 +914,7 @@ mod tests {
                 pitch_class: PitchClass::DSharp,
             },
             scientific_pitch_notation: "D#6",
-            alternative_pitch_notation: "highhighD#",
+            alternative_pitch_notation: "hihiD#",
         },
         PitchCase {
             pitch: Pitch {
@@ -922,7 +922,7 @@ mod tests {
                 pitch_class: PitchClass::E,
             },
             scientific_pitch_notation: "E6",
-            alternative_pitch_notation: "highhighE",
+            alternative_pitch_notation: "hihiE",
         },
         PitchCase {
             pitch: Pitch {
@@ -930,7 +930,7 @@ mod tests {
                 pitch_class: PitchClass::F,
             },
             scientific_pitch_notation: "F6",
-            alternative_pitch_notation: "highhighF",
+            alternative_pitch_notation: "hihiF",
         },
         PitchCase {
             pitch: Pitch {
@@ -938,7 +938,7 @@ mod tests {
                 pitch_class: PitchClass::FSharp,
             },
             scientific_pitch_notation: "F#6",
-            alternative_pitch_notation: "highhighF#",
+            alternative_pitch_notation: "hihiF#",
         },
         PitchCase {
             pitch: Pitch {
@@ -946,7 +946,7 @@ mod tests {
                 pitch_class: PitchClass::G,
             },
             scientific_pitch_notation: "G6",
-            alternative_pitch_notation: "highhighG",
+            alternative_pitch_notation: "hihiG",
         },
         PitchCase {
             pitch: Pitch {
@@ -954,7 +954,7 @@ mod tests {
                 pitch_class: PitchClass::GSharp,
             },
             scientific_pitch_notation: "G#6",
-            alternative_pitch_notation: "highhighG#",
+            alternative_pitch_notation: "hihiG#",
         },
         PitchCase {
             pitch: Pitch {
@@ -962,7 +962,7 @@ mod tests {
                 pitch_class: PitchClass::A,
             },
             scientific_pitch_notation: "A6",
-            alternative_pitch_notation: "highhighhighA",
+            alternative_pitch_notation: "hihihiA",
         },
         PitchCase {
             pitch: Pitch {
@@ -970,7 +970,7 @@ mod tests {
                 pitch_class: PitchClass::ASharp,
             },
             scientific_pitch_notation: "A#6",
-            alternative_pitch_notation: "highhighhighA#",
+            alternative_pitch_notation: "hihihiA#",
         },
         PitchCase {
             pitch: Pitch {
@@ -978,7 +978,7 @@ mod tests {
                 pitch_class: PitchClass::B,
             },
             scientific_pitch_notation: "B6",
-            alternative_pitch_notation: "highhighhighB",
+            alternative_pitch_notation: "hihihiB",
         },
         PitchCase {
             pitch: Pitch {
@@ -986,7 +986,7 @@ mod tests {
                 pitch_class: PitchClass::C,
             },
             scientific_pitch_notation: "C6",
-            alternative_pitch_notation: "highhighC",
+            alternative_pitch_notation: "hihiC",
         },
         PitchCase {
             pitch: Pitch {
@@ -994,7 +994,7 @@ mod tests {
                 pitch_class: PitchClass::CSharp,
             },
             scientific_pitch_notation: "C#7",
-            alternative_pitch_notation: "highhighhighC#",
+            alternative_pitch_notation: "hihihiC#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1002,7 +1002,7 @@ mod tests {
                 pitch_class: PitchClass::D,
             },
             scientific_pitch_notation: "D7",
-            alternative_pitch_notation: "highhighhighD",
+            alternative_pitch_notation: "hihihiD",
         },
         PitchCase {
             pitch: Pitch {
@@ -1010,7 +1010,7 @@ mod tests {
                 pitch_class: PitchClass::DSharp,
             },
             scientific_pitch_notation: "D#7",
-            alternative_pitch_notation: "highhighhighD#",
+            alternative_pitch_notation: "hihihiD#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1018,7 +1018,7 @@ mod tests {
                 pitch_class: PitchClass::E,
             },
             scientific_pitch_notation: "E7",
-            alternative_pitch_notation: "highhighhighE",
+            alternative_pitch_notation: "hihihiE",
         },
         PitchCase {
             pitch: Pitch {
@@ -1026,7 +1026,7 @@ mod tests {
                 pitch_class: PitchClass::F,
             },
             scientific_pitch_notation: "F7",
-            alternative_pitch_notation: "highhighhighF",
+            alternative_pitch_notation: "hihihiF",
         },
         PitchCase {
             pitch: Pitch {
@@ -1034,7 +1034,7 @@ mod tests {
                 pitch_class: PitchClass::FSharp,
             },
             scientific_pitch_notation: "F#7",
-            alternative_pitch_notation: "highhighhighF#",
+            alternative_pitch_notation: "hihihiF#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1042,7 +1042,7 @@ mod tests {
                 pitch_class: PitchClass::G,
             },
             scientific_pitch_notation: "G7",
-            alternative_pitch_notation: "highhighhighG",
+            alternative_pitch_notation: "hihihiG",
         },
         PitchCase {
             pitch: Pitch {
@@ -1050,7 +1050,7 @@ mod tests {
                 pitch_class: PitchClass::GSharp,
             },
             scientific_pitch_notation: "G#7",
-            alternative_pitch_notation: "highhighhighG#",
+            alternative_pitch_notation: "hihihiG#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1058,7 +1058,7 @@ mod tests {
                 pitch_class: PitchClass::A,
             },
             scientific_pitch_notation: "A7",
-            alternative_pitch_notation: "highhighhighhighA",
+            alternative_pitch_notation: "hihihihiA",
         },
         PitchCase {
             pitch: Pitch {
@@ -1066,7 +1066,7 @@ mod tests {
                 pitch_class: PitchClass::ASharp,
             },
             scientific_pitch_notation: "A#7",
-            alternative_pitch_notation: "highhighhighhighA#",
+            alternative_pitch_notation: "hihihihiA#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1074,7 +1074,7 @@ mod tests {
                 pitch_class: PitchClass::B,
             },
             scientific_pitch_notation: "B7",
-            alternative_pitch_notation: "highhighhighhighB",
+            alternative_pitch_notation: "hihihihiB",
         },
         PitchCase {
             pitch: Pitch {
@@ -1082,7 +1082,7 @@ mod tests {
                 pitch_class: PitchClass::C,
             },
             scientific_pitch_notation: "C8",
-            alternative_pitch_notation: "highhighhighhighC",
+            alternative_pitch_notation: "hihihihiC",
         },
         PitchCase {
             pitch: Pitch {
@@ -1090,7 +1090,7 @@ mod tests {
                 pitch_class: PitchClass::CSharp,
             },
             scientific_pitch_notation: "C#8",
-            alternative_pitch_notation: "highhighhighhighC#",
+            alternative_pitch_notation: "hihihihiC#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1098,7 +1098,7 @@ mod tests {
                 pitch_class: PitchClass::D,
             },
             scientific_pitch_notation: "D8",
-            alternative_pitch_notation: "highhighhighhighD",
+            alternative_pitch_notation: "hihihihiD",
         },
         PitchCase {
             pitch: Pitch {
@@ -1106,7 +1106,7 @@ mod tests {
                 pitch_class: PitchClass::DSharp,
             },
             scientific_pitch_notation: "D#8",
-            alternative_pitch_notation: "highhighhighhighD#",
+            alternative_pitch_notation: "hihihihiD#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1114,7 +1114,7 @@ mod tests {
                 pitch_class: PitchClass::E,
             },
             scientific_pitch_notation: "E8",
-            alternative_pitch_notation: "highhighhighhighE",
+            alternative_pitch_notation: "hihihihiE",
         },
         PitchCase {
             pitch: Pitch {
@@ -1122,7 +1122,7 @@ mod tests {
                 pitch_class: PitchClass::F,
             },
             scientific_pitch_notation: "F8",
-            alternative_pitch_notation: "highhighhighhighF",
+            alternative_pitch_notation: "hihihihiF",
         },
         PitchCase {
             pitch: Pitch {
@@ -1130,7 +1130,7 @@ mod tests {
                 pitch_class: PitchClass::FSharp,
             },
             scientific_pitch_notation: "F#8",
-            alternative_pitch_notation: "highhighhighhighF#",
+            alternative_pitch_notation: "hihihihiF#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1138,7 +1138,7 @@ mod tests {
                 pitch_class: PitchClass::G,
             },
             scientific_pitch_notation: "G8",
-            alternative_pitch_notation: "highhighhighhighG",
+            alternative_pitch_notation: "hihihihiG",
         },
         PitchCase {
             pitch: Pitch {
@@ -1146,7 +1146,7 @@ mod tests {
                 pitch_class: PitchClass::GSharp,
             },
             scientific_pitch_notation: "G#8",
-            alternative_pitch_notation: "highhighhighhighG#",
+            alternative_pitch_notation: "hihihihiG#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1154,7 +1154,7 @@ mod tests {
                 pitch_class: PitchClass::A,
             },
             scientific_pitch_notation: "A8",
-            alternative_pitch_notation: "highhighhighhighhighA",
+            alternative_pitch_notation: "hihihihihiA",
         },
         PitchCase {
             pitch: Pitch {
@@ -1162,7 +1162,7 @@ mod tests {
                 pitch_class: PitchClass::ASharp,
             },
             scientific_pitch_notation: "A#8",
-            alternative_pitch_notation: "highhighhighhighhighA#",
+            alternative_pitch_notation: "hihihihihiA#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1170,7 +1170,7 @@ mod tests {
                 pitch_class: PitchClass::B,
             },
             scientific_pitch_notation: "B8",
-            alternative_pitch_notation: "highhighhighhighhighB",
+            alternative_pitch_notation: "hihihihihiB",
         },
         PitchCase {
             pitch: Pitch {
@@ -1178,7 +1178,7 @@ mod tests {
                 pitch_class: PitchClass::C,
             },
             scientific_pitch_notation: "C255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighC",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiC",
         },
         PitchCase {
             pitch: Pitch {
@@ -1186,7 +1186,7 @@ mod tests {
                 pitch_class: PitchClass::CSharp,
             },
             scientific_pitch_notation: "C#255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighC#",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiC#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1194,7 +1194,7 @@ mod tests {
                 pitch_class: PitchClass::D,
             },
             scientific_pitch_notation: "D255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighD",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiD",
         },
         PitchCase {
             pitch: Pitch {
@@ -1202,7 +1202,7 @@ mod tests {
                 pitch_class: PitchClass::DSharp,
             },
             scientific_pitch_notation: "D#255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighD#",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiD#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1210,7 +1210,7 @@ mod tests {
                 pitch_class: PitchClass::E,
             },
             scientific_pitch_notation: "E255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighE",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiE",
         },
         PitchCase {
             pitch: Pitch {
@@ -1218,7 +1218,7 @@ mod tests {
                 pitch_class: PitchClass::F,
             },
             scientific_pitch_notation: "F255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighF",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiF",
         },
         PitchCase {
             pitch: Pitch {
@@ -1226,7 +1226,7 @@ mod tests {
                 pitch_class: PitchClass::FSharp,
             },
             scientific_pitch_notation: "F#255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighF#",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiF#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1234,7 +1234,7 @@ mod tests {
                 pitch_class: PitchClass::G,
             },
             scientific_pitch_notation: "G255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighG",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiG",
         },
         PitchCase {
             pitch: Pitch {
@@ -1242,7 +1242,7 @@ mod tests {
                 pitch_class: PitchClass::GSharp,
             },
             scientific_pitch_notation: "G#255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighG#",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiG#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1250,7 +1250,7 @@ mod tests {
                 pitch_class: PitchClass::A,
             },
             scientific_pitch_notation: "A255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighA",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiA",
         },
         PitchCase {
             pitch: Pitch {
@@ -1258,7 +1258,7 @@ mod tests {
                 pitch_class: PitchClass::ASharp,
             },
             scientific_pitch_notation: "A#255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighA#",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiA#",
         },
         PitchCase {
             pitch: Pitch {
@@ -1266,7 +1266,7 @@ mod tests {
                 pitch_class: PitchClass::B,
             },
             scientific_pitch_notation: "B255",
-            alternative_pitch_notation: "highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighB",
+            alternative_pitch_notation: "hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiB",
         },
     ];
 
@@ -1343,7 +1343,7 @@ mod tests {
         );
         assert_eq!(
             Err(ParsePitchError),
-            parse_alternative_pitch_notation("highhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighhighC"),
+            parse_alternative_pitch_notation("hihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihihiC"),
         );
         for case in PITCH_CASES {
             assert_eq!(
